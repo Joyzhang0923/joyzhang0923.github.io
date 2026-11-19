@@ -24,11 +24,23 @@
       <div class="page-head">
         <p class="eyebrow">02 / VIDEOS</p>
         <h1>影 · 视频作品</h1>
-        <p>口播讲解、文化随笔与 AI 视觉短片。点击卡片跳转对应平台观看。</p>
+        <p>共收录 33 支视频。点击封面即可在站内直接播放，无需扫码或跳转。</p>
       </div>
 
+      <div class="filters" id="filters" role="tablist" aria-label="视频分类"></div>
       <div class="card-grid" id="video-grid"></div>
     </main>
+
+    <div class="video-modal" id="modal" hidden role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="video-modal__box">
+        <div class="video-modal__bar">
+          <h2 class="video-modal__title" id="modal-title"></h2>
+          <button class="video-modal__close" type="button" id="modal-close" aria-label="关闭播放器">×</button>
+        </div>
+        <video class="video-modal__player" id="modal-player" controls playsinline preload="metadata"></video>
+        <p class="video-modal__desc" id="modal-desc"></p>
+      </div>
+    </div>
 
     <footer class="wrap site-footer">
       <span>© 2026 霓凰 · joy.abc.sd</span>
@@ -36,31 +48,172 @@
     </footer>
 
     <script>
-      // 每次上线新视频，只需在下面数组里新增一条即可
       const VIDEOS = [
+        // 生活与观察
         {
-          title: "年轻人的三个账户：抠门、挥霍、攒金豆",
-          platform: "微信视频号",
+          title: "这届年轻人的三个账户：抠门 · 挥霍 · 攒金豆",
+          cat: "生活与观察",
           date: "2026-11-19",
-          desc: "文化漫步者霓凰 · 视频号作品。聊聊年轻人手里的三个账户：抠门、挥霍与攒金豆。",
-          cover: "covers/2026-11-19-video1.jpg",
-          url: "https://weixin.qq.com/sph/A77C3Hu34n"
-        }
+          desc: "一边精打细算，一边为热爱买单，还要悄悄攒下底气——聊聊当下年轻人的消费与攒钱逻辑。",
+          cover: "covers/three-accounts.jpg",
+          src: "media/three-accounts.mp4"
+        },
+        {
+          title: "为什么年轻人不想升职加薪了？",
+          cat: "生活与观察",
+          date: "2026-11-13",
+          desc: "加薪 15%，换 24 小时待命？用反常识的数字拆解年轻人对职场与时间的新选择。",
+          cover: "covers/no-promotion.jpg",
+          src: "media/no-promotion.mp4"
+        },
+        {
+          title: "为什么年轻人都在「给自己开公司」？",
+          cat: "生活与观察",
+          date: "2026-11-14",
+          desc: "越来越多人开始把自己当作一家一人公司来经营，重新定义工作与个人价值。",
+          cover: "covers/open-company.jpg",
+          src: "media/open-company.mp4"
+        },
+        // 音乐影像
+        {
+          title: "我把生活种成光",
+          cat: "音乐影像",
+          date: "2026-06",
+          desc: "专辑《先做自己的太阳》同名曲目影像短片：在日常一隅，慢慢把生活种成光。",
+          cover: "covers/life-into-light.jpg",
+          src: "media/life-into-light.mp4"
+        },
+        {
+          title: "把你的伞还给雨",
+          cat: "音乐影像",
+          date: "2026-06",
+          desc: "雨夜城市光影短片：有些风雨不必躲，把伞还给雨，自己往前走。",
+          cover: "covers/umbrella-to-rain.jpg",
+          src: "media/umbrella-to-rain.mp4"
+        },
+        {
+          title: "星河来",
+          cat: "音乐影像",
+          date: "2026-05",
+          desc: "林间绿意与夏日光影短片。",
+          cover: "covers/starlight-comes.jpg",
+          src: "media/starlight-comes.mp4"
+        },
+        {
+          title: "去吧，少年！",
+          cat: "音乐影像",
+          date: "2026-06",
+          desc: "林荫道上的光影与祝福，送给正在出发的少年。",
+          cover: "covers/go-youth.jpg",
+          src: "media/go-youth.mp4"
+        },
+        // AI 科普系列 (EP01 - EP26)
+        { title: "EP01 · 什么是大语言模型（LLM）", cat: "AI 科普系列", date: "2026-10", desc: "两分钟看懂大语言模型是怎么学会说话的。", cover: "covers/ep01.jpg", src: "media/ep01-llm-v2.mp4" },
+        { title: "EP02 · 什么是 Token（词元）", cat: "AI 科普系列", date: "2026-10", desc: "AI 眼里的文字不是字，而是一个个切分好的 Token。", cover: "covers/ep02.jpg", src: "media/ep02-token-v2.mp4" },
+        { title: "EP03 · 什么是 Prompt（提示词）", cat: "AI 科普系列", date: "2026-10", desc: "为什么同样问 AI，有人问出神回复，有人只拿到废话？", cover: "covers/ep03.jpg", src: "media/ep03-prompt-v2.mp4" },
+        { title: "EP04 · 什么是 AI 幻觉（Hallucination）", cat: "AI 科普系列", date: "2026-10", desc: "为什么 AI 有时会一本正经地胡说八道？", cover: "covers/ep04.jpg", src: "media/ep04-hallucination-v2.mp4" },
+        { title: "EP05 · 什么是上下文窗口（Context Window）", cat: "AI 科普系列", date: "2026-10", desc: "聊着聊着 AI 就忘了前面说啥？因为它也有「桌面大小」。", cover: "covers/ep05.jpg", src: "media/ep05-context-v2.mp4" },
+        { title: "EP06 · 什么是模型训练（Training）", cat: "AI 科普系列", date: "2026-10", desc: "从海量阅读到考试纠错，大模型是怎么「读完万卷书」的。", cover: "covers/ep06.jpg", src: "media/ep06-training-v2.mp4" },
+        { title: "EP07 · 什么是多模态（Multimodal）", cat: "AI 科普系列", date: "2026-10", desc: "既能看图、听声，又能看视频和写代码。", cover: "covers/ep07.jpg", src: "media/ep07-multimodal-v2.mp4" },
+        { title: "EP08 · 什么是 RAG（检索增强生成）", cat: "AI 科普系列", date: "2026-10", desc: "让 AI 答题前先翻一遍你给的资料，少胡编、更靠谱。", cover: "covers/ep08.jpg", src: "media/ep08-rag-v2.mp4" },
+        { title: "EP09 · 什么是智能体（Agent）", cat: "AI 科普系列", date: "2026-10", desc: "从只会聊天的助手，变成能自己规划、调用工具干活的 Agent。", cover: "covers/ep09.jpg", src: "media/ep09-agent-v2.mp4" },
+        { title: "EP10 · 什么是开源模型（Open Source）", cat: "AI 科普系列", date: "2026-10", desc: "闭源和开源模型差在哪？普通人也能在本地跑模型吗？", cover: "covers/ep10.jpg", src: "media/ep10-opensource-v2.mp4" },
+        { title: "EP11 · 什么是 AIGC", cat: "AI 科普系列", date: "2026-10", desc: "生成式人工智能如何改变写文章、画画、做歌和拍视频。", cover: "covers/ep11.jpg", src: "media/ep11-aigc-v2.mp4" },
+        { title: "EP12 · 什么是 AGI（通用人工智能）", cat: "AI 科普系列", date: "2026-10", desc: "比今天的大模型更进一步，AGI 到底意味着什么？", cover: "covers/ep12.jpg", src: "media/ep12-agi-v2.mp4" },
+        { title: "EP13 · 什么是模型参数（Parameter）", cat: "AI 科普系列", date: "2026-10", desc: "常听到的 7B、70B 参数，究竟代表模型的什么能力？", cover: "covers/ep13.jpg", src: "media/ep13-parameter-v2.mp4" },
+        { title: "EP14 · 什么是算力（Compute）", cat: "AI 科普系列", date: "2026-10", desc: "为什么训练和运行 AI 离不开显卡与庞大的算力集群？", cover: "covers/ep14.jpg", src: "media/ep14-compute-v2.mp4" },
+        { title: "EP15 · 什么是微调（Fine-tuning）", cat: "AI 科普系列", date: "2026-10", desc: "给通用大模型做专业「岗前培训」，让它更懂特定行业。", cover: "covers/ep15.jpg", src: "media/ep15-finetune-v2.mp4" },
+        { title: "EP16 · 什么是思维链（Chain of Thought）", cat: "AI 科普系列", date: "2026-10", desc: "让 AI「一步一步想」，为什么准确率会一下子提高？", cover: "covers/ep16.jpg", src: "media/ep16-cot-v2.mp4" },
+        { title: "EP17 · 什么是扩散模型（Diffusion）", cat: "AI 科普系列", date: "2026-10", desc: "AI 画画和生成视频背后的魔法：从一片噪点里「擦」出画面。", cover: "covers/ep17.jpg", src: "media/ep17-diffusion-v2.mp4" },
+        { title: "EP18 · 什么是具身智能（Embodied AI）", cat: "AI 科普系列", date: "2026-10", desc: "当 AI 装进机器人身体，开始看世界、拿东西、走进现实生活。", cover: "covers/ep18.jpg", src: "media/ep18-embodied-v2.mp4" },
+        { title: "EP19 · 什么是模型对齐（Alignment）", cat: "AI 科普系列", date: "2026-10", desc: "怎么让聪明无比的 AI 懂规矩、守底线、站在人类这边？", cover: "covers/ep19.jpg", src: "media/ep19-alignment-v2.mp4" },
+        { title: "EP20 · 什么是深度伪造（Deepfake）", cat: "AI 科普系列", date: "2026-10", desc: "换脸、拟声越来越逼真，我们该如何识别与防范？", cover: "covers/ep20.jpg", src: "media/ep20-deepfake-v2.mp4" },
+        { title: "EP21 · 什么是世界模型（World Model）", cat: "AI 科普系列", date: "2026-10", desc: "不仅会接龙文字，还要在脑海里推演真实世界的物理规律。", cover: "covers/ep21.jpg", src: "media/ep21-world-model-v2.mp4" },
+        { title: "EP22 · 什么是主动式智能体（Proactive Agent）", cat: "AI 科普系列", date: "2026-10", desc: "不用你每次催，AI 自己知道什么时候该提醒你、帮你做。", cover: "covers/ep22.jpg", src: "media/ep22-proactive-agent-v2.mp4" },
+        { title: "EP23 · 什么是模型蒸馏（Distillation）", cat: "AI 科普系列", date: "2026-10", desc: "让大老师傅带小徒弟，把巨型模型的能力浓缩进轻量小模型。", cover: "covers/ep23.jpg", src: "media/ep23-distillation-v2.mp4" },
+        { title: "EP24 · 什么是推理模型（Reasoning Model）", cat: "AI 科普系列", date: "2026-10", desc: "先停下来想清楚再回答：推理模型和普通聊天模型有什么区别？", cover: "covers/ep24.jpg", src: "media/ep24-reasoning-model-v2.mp4" },
+        { title: "EP25 · 什么是 Computer Use（电脑操控）", cat: "AI 科普系列", date: "2026-10", desc: "AI 开始像人一样看屏幕、动鼠标、敲键盘操作软件。", cover: "covers/ep25.jpg", src: "media/ep25-computer-use-v2.mp4" },
+        { title: "EP26 · 什么是 AI 内容检测（AI Detection）", cat: "AI 科普系列", date: "2026-11", desc: "文章、图片、视频真假难辨，检测技术是怎么找线索的？", cover: "covers/ep26.jpg", src: "media/ep26-ai-detection-v2.mp4" }
       ];
 
-      document.getElementById("video-grid").innerHTML = VIDEOS.map(v => `
-        <a class="media-card" href="${v.url}" target="_blank" rel="noopener">
-          <div class="media-card__thumb">
-            <img src="${v.cover}" alt="${v.title}" loading="lazy" />
-            <span class="media-card__platform">${v.platform} ↗</span>
-          </div>
-          <div class="media-card__body">
-            <span class="media-card__meta">${v.date} · ${v.platform}</span>
-            <h2 class="media-card__title">${v.title}</h2>
-            <p class="media-card__desc">${v.desc}</p>
-          </div>
-        </a>
-      `).join("");
+      const CATS = ["全部", "生活与观察", "音乐影像", "AI 科普系列"];
+      const filtersEl = document.getElementById("filters");
+      const gridEl = document.getElementById("video-grid");
+      const modal = document.getElementById("modal");
+      const modalTitle = document.getElementById("modal-title");
+      const modalPlayer = document.getElementById("modal-player");
+      const modalDesc = document.getElementById("modal-desc");
+      const modalClose = document.getElementById("modal-close");
+
+      let current = "全部";
+
+      function renderFilters() {
+        filtersEl.innerHTML = CATS.map(cat => {
+          const count = cat === "全部" ? VIDEOS.length : VIDEOS.filter(v => v.cat === cat).length;
+          const active = cat === current ? "is-active" : "";
+          return `<button class="filter-btn ${active}" type="button" data-cat="${cat}">${cat} (${count})</button>`;
+        }).join("");
+      }
+
+      function renderGrid() {
+        const list = current === "全部" ? VIDEOS : VIDEOS.filter(v => v.cat === current);
+        gridEl.innerHTML = list.map((v, i) => `
+          <button class="media-card media-card--video" type="button" data-idx="${VIDEOS.indexOf(v)}">
+            <div class="media-card__thumb">
+              <img src="${v.cover}" alt="${v.title}" loading="lazy" />
+              <div class="media-card__play" aria-hidden="true">
+                <span class="media-card__play-icon">
+                  <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                </span>
+              </div>
+            </div>
+            <div class="media-card__body">
+              <span class="media-card__meta">${v.date} · ${v.cat}</span>
+              <h2 class="media-card__title">${v.title}</h2>
+              <p class="media-card__desc">${v.desc}</p>
+            </div>
+          </button>
+        `).join("");
+      }
+
+      function openVideo(idx) {
+        const v = VIDEOS[idx];
+        if (!v) return;
+        modalTitle.textContent = v.title;
+        modalDesc.textContent = v.desc;
+        modalPlayer.poster = v.cover;
+        modalPlayer.src = v.src;
+        modal.hidden = false;
+        modalPlayer.play().catch(() => {});
+      }
+
+      function closeVideo() {
+        modalPlayer.pause();
+        modalPlayer.removeAttribute("src");
+        modalPlayer.load();
+        modal.hidden = true;
+      }
+
+      filtersEl.addEventListener("click", (e) => {
+        const btn = e.target.closest("button[data-cat]");
+        if (!btn) return;
+        current = btn.dataset.cat;
+        renderFilters();
+        renderGrid();
+      });
+
+      gridEl.addEventListener("click", (e) => {
+        const card = e.target.closest("button[data-idx]");
+        if (!card) return;
+        openVideo(Number(card.dataset.idx));
+      });
+
+      modalClose.addEventListener("click", closeVideo);
+      modal.addEventListener("click", (e) => { if (e.target === modal) closeVideo(); });
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape" && !modal.hidden) closeVideo(); });
+
+      renderFilters();
+      renderGrid();
     </script>
   </body>
 </html>

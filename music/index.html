@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>音 · 先做自己的太阳 | 霓凰</title>
+    <link rel="stylesheet" href="../assets/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap nav-bar">
+        <a class="brand" href="../"><span class="brand-dot" aria-hidden="true"></span>霓凰</a>
+        <nav class="nav-links" aria-label="主导航">
+          <a href="../">首页</a>
+          <a href="../articles/">文章</a>
+          <a href="../videos/">影像</a>
+          <a href="./" aria-current="page">音乐</a>
+          <a href="../about/">关于</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <div class="page-head">
+        <p class="eyebrow">03 / MUSIC</p>
+        <h1>音 · 专辑《先做自己的太阳》</h1>
+        <p>网易云音乐人「霓凰」 · 12 首 · 2026 · AI 创作音乐。写一个人在风雨里不再等待别人的光，慢慢把自己活成太阳。</p>
+      </div>
+
+      <section class="album-box" aria-label="专辑播放器">
+        <div class="album-side">
+          <img class="album-cover" src="../album-cover.jpg" alt="专辑《先做自己的太阳》封面" />
+          <div class="now-row">
+            <button class="play-btn" type="button" id="pl-toggle" aria-label="播放">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z" /></svg>
+            </button>
+            <div class="now-meta">
+              <b id="pl-title">把生活种成光</b>
+              <span id="pl-state">点右侧任意一首开始播放</span>
+            </div>
+          </div>
+          <input class="seek" id="pl-seek" type="range" min="0" max="100" value="0" aria-label="播放进度" />
+          <div class="time-row">
+            <span id="pl-cur">0:00</span>
+            <span id="pl-dur">4:34</span>
+          </div>
+        </div>
+
+        <ol class="track-list" id="pl-list">
+          <li data-id="3393802973" data-dur="274"><button class="track-btn" type="button"><span class="track-no">1</span><span class="track-name">把生活种成光</span><span class="track-dur">4:34</span></button></li>
+          <li data-id="3394704415" data-dur="308"><button class="track-btn" type="button"><span class="track-no">2</span><span class="track-name">野风向北</span><span class="track-dur">5:08</span></button></li>
+          <li data-id="3394938326" data-dur="184"><button class="track-btn" type="button"><span class="track-no">3</span><span class="track-name">乱得漂亮</span><span class="track-dur">3:04</span></button></li>
+          <li data-id="3394945050" data-dur="354"><button class="track-btn" type="button"><span class="track-no">4</span><span class="track-name">先做自己的太阳</span><span class="track-dur">5:54</span></button></li>
+          <li data-id="3399038827" data-dur="269"><button class="track-btn" type="button"><span class="track-no">5</span><span class="track-name">想起时也会发光</span><span class="track-dur">4:29</span></button></li>
+          <li data-id="3399039357" data-dur="258"><button class="track-btn" type="button"><span class="track-no">6</span><span class="track-name">慢慢亮</span><span class="track-dur">4:18</span></button></li>
+          <li data-id="3399042637" data-dur="343"><button class="track-btn" type="button"><span class="track-no">7</span><span class="track-name">九万里风</span><span class="track-dur">5:43</span></button></li>
+          <li data-id="3401472475" data-dur="246"><button class="track-btn" type="button"><span class="track-no">8</span><span class="track-name">今晚不赶路</span><span class="track-dur">4:06</span></button></li>
+          <li data-id="3401482593" data-dur="265"><button class="track-btn" type="button"><span class="track-no">9</span><span class="track-name">人间小满</span><span class="track-dur">4:25</span></button></li>
+          <li data-id="3444340346" data-dur="233"><button class="track-btn" type="button"><span class="track-no">10</span><span class="track-name">星轨的底牌</span><span class="track-dur">3:53</span></button></li>
+          <li data-id="3444344588" data-dur="199"><button class="track-btn" type="button"><span class="track-no">11</span><span class="track-name">翻过浪浪山</span><span class="track-dur">3:19</span></button></li>
+          <li data-id="3444358058" data-dur="223"><button class="track-btn" type="button"><span class="track-no">12</span><span class="track-name">余白</span><span class="track-dur">3:43</span></button></li>
+        </ol>
+        <audio id="pl-audio" preload="none" playsinline></audio>
+      </section>
+    </main>
+
+    <footer class="wrap site-footer">
+      <span>© 2026 霓凰 · joy.abc.sd</span>
+      <span>公众号：文化漫步者霓凰</span>
+    </footer>
+
+    <script>
+      (function () {
+        const audio = document.getElementById("pl-audio");
+        const rows = Array.from(document.getElementById("pl-list").children);
+        const toggle = document.getElementById("pl-toggle");
+        const seek = document.getElementById("pl-seek");
+        const titleEl = document.getElementById("pl-title");
+        const stateEl = document.getElementById("pl-state");
+        const curEl = document.getElementById("pl-cur");
+        const durEl = document.getElementById("pl-dur");
+        const PLAY = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+        const PAUSE = '<svg viewBox="0 0 24 24"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg>';
+        let idx = -1, dragging = false;
+
+        const fmt = (s) => {
+          s = Math.max(0, Math.floor(s || 0));
+          return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0");
+        };
+        const name = (i) => rows[i].querySelector(".track-name").textContent;
+        const total = () => (isFinite(audio.duration) && audio.duration > 0) ? audio.duration : Number(rows[Math.max(idx, 0)].dataset.dur);
+
+        function paint() {
+          const t = total(), c = audio.currentTime || 0;
+          seek.max = t;
+          if (!dragging) seek.value = c;
+          curEl.textContent = fmt(dragging ? seek.value : c);
+          durEl.textContent = fmt(t);
+        }
+
+        function ui() {
+          const playing = idx >= 0 && !audio.paused;
+          toggle.innerHTML = playing ? PAUSE : PLAY;
+          rows.forEach((r, i) => r.classList.toggle("is-current", i === idx));
+          if (idx >= 0) {
+            titleEl.textContent = name(idx);
+            stateEl.textContent = (playing ? "正在播放" : "已暂停") + " · 第 " + (idx + 1) + " 首";
+          }
+        }
+
+        function select(i) {
+          if (i === idx) {
+            audio.paused ? audio.play().catch(() => {}) : audio.pause();
+            ui();
+            return;
+          }
+          idx = i;
+          audio.src = "https://music.163.com/song/media/outer/url?id=" + rows[i].dataset.id + ".mp3";
+          audio.load();
+          audio.play().catch(() => {
+            stateEl.textContent = "若无法直接播放，请前往网易云音乐收听";
+          });
+          ui();
+          paint();
+        }
+
+        toggle.addEventListener("click", () => select(idx < 0 ? 0 : idx));
+        rows.forEach((r, i) => r.querySelector("button").addEventListener("click", () => select(i)));
+        audio.addEventListener("timeupdate", paint);
+        audio.addEventListener("play", ui);
+        audio.addEventListener("pause", ui);
+        audio.addEventListener("ended", () => select((idx + 1) % rows.length));
+        audio.addEventListener("error", () => {
+          stateEl.textContent = "当前曲目暂不可外链播放，可在网易云音乐搜索「霓凰」收听";
+        });
+        seek.addEventListener("input", () => { dragging = true; paint(); });
+        seek.addEventListener("change", () => { dragging = false; audio.currentTime = Number(seek.value); paint(); });
+      })();
+    </script>
+  </body>
+</html>

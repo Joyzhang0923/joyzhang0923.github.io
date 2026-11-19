@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>影 · 视频作品 | 霓凰</title>
+    <link rel="stylesheet" href="../assets/style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap nav-bar">
+        <a class="brand" href="../"><span class="brand-dot" aria-hidden="true"></span>霓凰</a>
+        <nav class="nav-links" aria-label="主导航">
+          <a href="../">首页</a>
+          <a href="../articles/">文章</a>
+          <a href="./" aria-current="page">影像</a>
+          <a href="../music/">音乐</a>
+          <a href="../about/">关于</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <div class="page-head">
+        <p class="eyebrow">02 / VIDEOS</p>
+        <h1>影 · 视频作品</h1>
+        <p>口播讲解、文化随笔与 AI 视觉短片。点击卡片跳转对应平台观看。</p>
+      </div>
+
+      <div class="card-grid" id="video-grid"></div>
+    </main>
+
+    <footer class="wrap site-footer">
+      <span>© 2026 霓凰 · joy.abc.sd</span>
+      <span>公众号：文化漫步者霓凰</span>
+    </footer>
+
+    <script>
+      // 每次上线新视频，只需在下面数组里新增一条即可
+      const VIDEOS = [
+        {
+          title: "【示例占位】第一支 AI 讲解短片（待替换为你的真实链接）",
+          platform: "B站",
+          date: "2026-11",
+          desc: "把口播内容与动画信息图结合，用两分钟讲清一个让人上头的生活或科技话题。",
+          cover: "../cover-nibao-agents.png",
+          url: "https://www.bilibili.com/"
+        },
+        {
+          title: "【示例占位】先做自己的太阳 · 视觉 MV（待替换）",
+          platform: "微信视频号",
+          date: "2026-11",
+          desc: "同名专辑主题曲视觉短片，配以东方纸页与手绘质感画面。",
+          cover: "../album-cover.jpg",
+          url: "https://channels.weixin.qq.com/"
+        },
+        {
+          title: "【示例占位】东方节气与生活手账（待替换）",
+          platform: "YouTube",
+          date: "2026-11",
+          desc: "用简短影像记录节气养护、读书笔记与日常思考。",
+          cover: "../articles/2026-11-05-lidong-feng/cover.jpg",
+          url: "https://www.youtube.com/"
+        }
+      ];
+
+      document.getElementById("video-grid").innerHTML = VIDEOS.map(v => `
+        <a class="media-card" href="${v.url}" target="_blank" rel="noopener">
+          <div class="media-card__thumb">
+            <img src="${v.cover}" alt="${v.title}" loading="lazy" />
+            <span class="media-card__platform">${v.platform} ↗</span>
+          </div>
+          <div class="media-card__body">
+            <span class="media-card__meta">${v.date} · ${v.platform}</span>
+            <h2 class="media-card__title">${v.title}</h2>
+            <p class="media-card__desc">${v.desc}</p>
+          </div>
+        </a>
+      `).join("");
+    </script>
+  </body>
+</html>
